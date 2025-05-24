@@ -25,3 +25,25 @@ module tt_um_test_project (
   wire _unused = &{ena, clk, rst_n, 1'b0};
 
 endmodule
+
+module eight_bit_sync_counter (
+    input wire clk,
+    input wire rst,
+    input wire load,
+    input wire out_en,
+    input wire [7:0] base_count,
+
+    output wire [7:0] counter_state
+);
+
+    reg [7:0] count;
+    assign counter_state = out_en ? count : 8'bz;
+
+    always @(posedge clk) begin
+      if (rst) count <= 0;
+      else if (load)
+        count <= base_count;
+      else
+        count <= count + 1;
+    end
+endmodule
